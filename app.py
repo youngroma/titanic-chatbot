@@ -14,7 +14,7 @@ question = st.text_input("Ask about Titanic passengers:")
 if st.button("Ask"):
     if question:
         # Отправка запроса на FastAPI сервер
-        response = requests.get("http://127.0.0.1:8000/ask", params={"question": question})
+        response = requests.get("https://titanikchatbot.streamlit.app/ask", params={"question": question})
 
         if response.status_code == 200:
             data = response.json()
