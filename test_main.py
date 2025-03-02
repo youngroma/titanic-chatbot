@@ -41,3 +41,13 @@ def test_analyze_titanic_data_embarked():
     assert isinstance(result, str)
     assert "Embarked counts" in result
 
+
+def test_generate_chart():
+    img_data = generate_chart(df, "Age")
+    assert isinstance(img_data, str)
+    assert len(img_data) > 0
+
+
+def test_ask_question_no_param():
+    response = client.get("/ask")
+    assert response.status_code == 422
