@@ -20,8 +20,8 @@ if st.button("Ask"):
 
             if "image" in data:
                 try:
-                    image_data = base64.b64decode(data["image"])  
-                    image = Image.open(BytesIO(image_data)) 
+                    image_data = base64.b64decode(data["image"])
+                    image = Image.open(BytesIO(image_data))
                     st.image(image, caption="Histogram of Passenger Ages", use_container_width=True)
                 except Exception as e:
                     st.error(f"Error decoding or displaying the image: {e}")
