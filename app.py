@@ -10,7 +10,10 @@ question = st.text_input("Ask about Titanic passengers:")
 
 if st.button("Ask"):
     if question:
-        response = requests.get("https://titanic-chatbot-production.up.railway.app/ask", params={"question": question})
+        response = requests.get(
+            "https://titanic-chatbot-production.up.railway.app/ask",
+            params={"question": question}
+        )
 
         if response.status_code == 200:
             data = response.json()

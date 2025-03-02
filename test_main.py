@@ -1,4 +1,3 @@
-import pytest
 from fastapi.testclient import TestClient
 from main import app, analyze_titanic_data, generate_chart, df
 
@@ -6,14 +5,18 @@ client = TestClient(app)
 
 
 def test_ask_question_text():
-    response = client.get("/ask", params={"question": "What percentage of passengers were male on the Titanic?"})
+    response = client.get(
+        "/ask", params={"question": "What percentage of passengers were male on the Titanic?"}
+    )
     assert response.status_code == 200
     assert "answer" in response.json()
     assert "%" in response.json()["answer"]
 
 
 def test_ask_question_histogram():
-    response = client.get("/ask", params={"question": "Show me a histogram of passenger ages"})
+    response = client.get(
+        "/ask", params={"question": "Show me a histogram of passenger ages"}
+    )
     assert response.status_code == 200
     assert "image" in response.json()
 
