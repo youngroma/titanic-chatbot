@@ -25,6 +25,9 @@ jobs:
           pip install -r requirements.txt
           pip install flake8
 
+      - name: Set OPENAI_API_KEY from GitHub Secrets
+        run: echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> $GITHUB_ENV
+
       - name: Run Flake8 (Linting)
         run: flake8 --max-line-length=100 --exclude=venv
 
