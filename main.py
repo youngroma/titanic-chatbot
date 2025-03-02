@@ -14,7 +14,9 @@ from functools import lru_cache
 load_dotenv()
 openai_key = os.getenv("OPENAI_API_KEY")
 if not openai_key:
-    raise ValueError("OPENAI_API_KEY is not set! Please make sure it is in your environment variables or .env file.")
+    raise ValueError(
+        "OPENAI_API_KEY is not set! Please make sure it is in your environment variables or .env file."
+    )
 
 llm = ChatOpenAI(openai_api_key=openai_key)
 
