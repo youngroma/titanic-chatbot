@@ -18,7 +18,6 @@ llm = ChatOpenAI(openai_api_key=openai_key)
 
 df = pd.read_csv("titanic.csv")
 
-# Инструменты для LangChain
 tools = [
     Tool(
         name="Titanic Data Analysis",
@@ -27,12 +26,10 @@ tools = [
     ),
 ]
 
-# Инициализация агента
 agent = initialize_agent(tools, llm, agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True, return_only_outputs=True)
 
 app = FastAPI()
 
-# Функция для генерации графиков
 def generate_chart(df, column):
     plt.figure(figsize=(8, 4))
     sns.histplot(df[column], bins=20, kde=True)
@@ -42,13 +39,12 @@ def generate_chart(df, column):
     return base64.b64encode(buf.read()).decode('utf-8')
 
 
-@lru_cache(maxsize=50)  # Храним 50 последних запросов в кэше
+@lru_cache(maxsize=50)  
 def cached_agent_response(query):
     return agent.invoke(query)
 
 
 def analyze_titanic_data(query):
-    # Обрабатываем простые вопросы напрямую
     if "percentage of passengers were male" in query:
         male_percentage = df[df["Sex"] == "male"].shape[0] / df.shape[0] * 100
         return f"{male_percentage:.2f}% of passengers were male."
@@ -65,11 +61,9 @@ def analyze_titanic_data(query):
         embarked_counts = df["Embarked"].value_counts().to_dict()
         return f"Embarked counts: {embarked_counts}"
 
-    # Если запрос сложный, используем кэш
     try:
         response = agent.invoke(query)
 
-        # Проверяем тип данных
         if isinstance(response, dict):
             return response.get("output", "I couldn't find an answer.")
         elif isinstance(response, list):
@@ -89,14 +83,12 @@ def analyze_titanic_data(query):
 def ask_question(question: str):
     try:
         response = analyze_titanic_data(question)
-        # Проверяем, является ли ответ словарем с изображением
         if isinstance(response, dict) and "image" in response:
-            return response  # Возвращаем изображение как строку base64
+            return response  
         else:
-            return {"answer": response}  # Возвращаем текстовый ответ
+            return {"answer": response}  
     except Exception as e:
         return {"answer": f"Error: {str(e)}"}
 
-# Запуск FastAPI сервера
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)
